@@ -1,0 +1,58 @@
+{
+  "name": "@gohub/sentry-loop-orchestrator",
+  "version": "1.0.0",
+  "description": "Cursor SDK orchestrator: Sentry issue → investigate → fix/skeptic loop → GitHub PR",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "sentry-fix-orchestrator": "./bin/sentry-fix-orchestrator.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "bin",
+    "dist",
+    "examples",
+    "README.md",
+    "LICENSE",
+    "SECURITY.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "tsx src/index.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "tsx --test src/parse-output.test.ts src/orchestrator.test.ts src/agents/extract-pr-url.test.ts src/prompts/untrusted.test.ts src/sentry/parse-payload.test.ts src/sentry/issue-url.test.ts src/dedupe/check.test.ts src/pr/build-body.test.ts",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "dependencies": {
+    "@cursor/sdk": "^1.0.23"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcrisologo/sentry_loop_orchestrator.git"
+  },
+  "keywords": [
+    "sentry",
+    "cursor",
+    "github",
+    "auto-fix",
+    "orchestrator"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

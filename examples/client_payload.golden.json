@@ -1,0 +1,10 @@
+{
+  "issue_id": "1234567890",
+  "issue_url": "https://sentry.io/issues/1234567890/",
+  "title": "NoMethodError: undefined method `foo' for nil:NilClass",
+  "culprit": "app/services/example_service.rb in call",
+  "environment": "production",
+  "count": 42,
+  "level": "error",
+  "stacktrace": "NoMethodError: undefined method `foo' for nil:NilClass\n  app/services/example_service.rb:15:in `call'\n  app/controllers/example_controller.rb:8:in `create'"
+}

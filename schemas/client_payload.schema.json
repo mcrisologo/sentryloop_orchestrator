@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mcrisologo/sentry_loop_orchestrator/schemas/client_payload.schema.json",
+  "title": "SentryLoopClientPayload",
+  "description": "Wire contract for GitHub repository_dispatch client_payload (event_type: sentry_issue). Both sentry_loop_bridge and sentry_loop_orchestrator must stay compatible with this shape.",
+  "type": "object",
+  "required": ["issue_id", "issue_url", "title"],
+  "additionalProperties": true,
+  "properties": {
+    "issue_id": { "type": ["string", "number"], "minLength": 1 },
+    "issue_url": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "culprit": { "type": "string" },
+    "environment": { "type": "string" },
+    "count": { "type": ["string", "number"] },
+    "level": { "type": "string" },
+    "stacktrace": { "type": "string" }
+  }
+}

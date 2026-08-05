@@ -1,0 +1,40 @@
+{
+  "client_payload": {
+    "data": {
+      "issue": {
+        "id": "9876543210",
+        "title": "ActiveRecord::RecordNotFound",
+        "culprit": "app/controllers/clients_controller.rb in show",
+        "permalink": "https://sentry.io/issues/9876543210/",
+        "count": "12",
+        "level": "error",
+        "firstSeen": "2026-08-01T00:00:00Z"
+      },
+      "event": {
+        "environment": "production",
+        "exception": {
+          "values": [
+            {
+              "type": "ActiveRecord::RecordNotFound",
+              "value": "Couldn't find Client with 'id'=0",
+              "stacktrace": {
+                "frames": [
+                  {
+                    "filename": "app/controllers/clients_controller.rb",
+                    "function": "show",
+                    "lineno": 24
+                  },
+                  {
+                    "filename": "app/models/client.rb",
+                    "function": "find!",
+                    "lineno": 10
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
