@@ -1,6 +1,6 @@
 # Wire contract: `client_payload`
 
-Shared with [`sentry_loop_bridge`](https://github.com/mcrisologo/sentry_loop_bridge).
+Shared with [`sentryloop_rubybridge`](https://github.com/mcrisologo/sentryloop_rubybridge).
 
 | Field | Required | Notes |
 |-------|----------|-------|
