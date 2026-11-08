@@ -7,7 +7,11 @@ import {
   parseSkepticReport,
   skepticAllowsProceed,
 } from "./pr/parse-output.js";
-import { isSentryAutoFixEnabled, clampBlockReviews } from "./config.js";
+import {
+  assertGithubName,
+  isSentryAutoFixEnabled,
+  clampBlockReviews,
+} from "./config.js";
 import { truncate, untrustedBlock } from "./prompts/untrusted.js";
 import { issueFingerprint } from "./dedupe/fingerprint.js";
 
@@ -105,6 +109,19 @@ describe("config kill switch", () => {
   it("clamps block reviews to 3", () => {
     assert.equal(clampBlockReviews(99), 3);
     assert.equal(clampBlockReviews(0), 3);
+  });
+
+  it("accepts GitHub owner and repo names", () => {
+    assert.doesNotThrow(() => assertGithubName("GITHUB_OWNER", "mcrisologo"));
+    assert.doesNotThrow(() =>
+      assertGithubName("GITHUB_REPO", "sentryloop_orchestrator"),
+    );
+  });
+
+  it("rejects owner/repo values that could inject paths or flags", () => {
+    assert.throws(() => assertGithubName("GITHUB_OWNER", "../evil"), /must be/);
+    assert.throws(() => assertGithubName("GITHUB_REPO", "--repo"), /must be/);
+    assert.throws(() => assertGithubName("GITHUB_REPO", "acme/widgets"), /must be/);
   });
 });
 

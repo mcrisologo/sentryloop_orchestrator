@@ -2,9 +2,11 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { escapeMarkdownText } from "../format/markdown.js";
 import { buildPrBody } from "./build-body.js";
+import { buildFailureReport } from "./failure-report.js";
 import type {
   FixIterationResult,
   InvestigationResult,
+  OrchestratorResult,
   SentryIssueContext,
 } from "../types.js";
 
@@ -43,5 +45,40 @@ describe("buildPrBody markdown safety", () => {
 describe("escapeMarkdownText", () => {
   it("escapes brackets and emphasis markers", () => {
     assert.equal(escapeMarkdownText("a[b]*c"), "a\\[b\\]\\*c");
+  });
+});
+
+describe("buildFailureReport markdown safety", () => {
+  it("fences root cause and does not allow fence breakout", () => {
+    const result: OrchestratorResult = {
+      issue: {
+        issueId: "1",
+        issueUrl: "https://sentry.io/issues/1/",
+        title: "Boom",
+      },
+      investigation: {
+        raw: "",
+        rootCause: "```\n# injected heading\n```",
+        affectedFiles: [],
+      },
+      iterations: [
+        {
+          iteration: 1,
+          fixerOutput: "",
+          skepticReport: { verdict: "Revise", raw: "", blockingFindings: [] },
+          testsPassed: false,
+          testOutput: "",
+          regressionSpecPath: "spec/`rm -rf`_spec.rb",
+        },
+      ],
+      agreed: false,
+      stopReason: "max_block_reviews",
+      maxBlockReviews: 3,
+    };
+
+    const report = buildFailureReport(result);
+    assert.match(report, /```text/);
+    assert.equal(report.includes("```\n# injected"), false);
+    assert.match(report, /spec\/'rm -rf'_spec\.rb/);
   });
 });
