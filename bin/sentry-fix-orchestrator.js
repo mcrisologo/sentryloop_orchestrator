@@ -9,13 +9,15 @@ const distEntry = join(here, "..", "dist", "index.js");
 const srcEntry = join(here, "..", "src", "index.ts");
 
 const useDist = existsSync(distEntry);
-const command = useDist ? process.execPath : "npx";
-const args = useDist
-  ? [distEntry, ...process.argv.slice(2)]
-  : ["tsx", srcEntry, ...process.argv.slice(2)];
+const tsxCli = join(here, "..", "node_modules/tsx/dist/cli.mjs");
+if (!useDist && !existsSync(tsxCli)) {
+  console.error("Build the package (npm run build) or install devDependencies (tsx).");
+  process.exit(1);
+}
 
-const child = spawn(command, args, {
-  stdio: "inherit",
-  shell: !useDist && process.platform === "win32",
-});
+const child = spawn(
+  process.execPath,
+  [useDist ? distEntry : tsxCli, ...(useDist ? [] : [srcEntry]), ...process.argv.slice(2)],
+  { stdio: "inherit" },
+);
 child.on("exit", (code) => process.exit(code ?? 1));

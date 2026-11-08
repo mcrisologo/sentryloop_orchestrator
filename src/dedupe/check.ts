@@ -1,3 +1,8 @@
+import {
+  escapeCodeSpan,
+  escapeMarkdownText,
+  singleLine,
+} from "../format/markdown.js";
 import type { OrchestratorConfig, SentryIssueContext } from "../types.js";
 import { fingerprintBasis, issueFingerprint } from "./fingerprint.js";
 
@@ -224,11 +229,11 @@ async function createLock(
   const body = [
     `Active Sentry auto-fix lock.`,
     ``,
-    `- Marker: \`${marker}\``,
+    `- Marker: \`${escapeCodeSpan(marker)}\``,
     `- Sentry: ${issue.issueUrl}`,
-    `- Issue ID: \`${issue.issueId.replace(/`/g, "'")}\``,
-    `- Title: ${issue.title.replace(/[\r\n]+/g, " ").slice(0, 200)}`,
-    `- Basis: ${fingerprintBasis(issue)}`,
+    `- Issue ID: \`${escapeCodeSpan(singleLine(issue.issueId, 80))}\``,
+    `- Title: ${escapeMarkdownText(singleLine(issue.title, 200))}`,
+    `- Basis: ${escapeMarkdownText(singleLine(fingerprintBasis(issue), 400))}`,
     ``,
     `_Other events/issues with the same fingerprint are skipped until this lock closes._`,
   ].join("\n");

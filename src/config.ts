@@ -56,6 +56,8 @@ export function loadConfig(): OrchestratorConfig {
       "GITHUB_OWNER and GITHUB_REPO are required (no hardcoded defaults).",
     );
   }
+  assertGithubName("GITHUB_OWNER", githubOwner);
+  assertGithubName("GITHUB_REPO", githubRepo);
 
   const requested = Number(process.env.MAX_FIX_ITERATIONS ?? MAX_BLOCK_REVIEWS);
   const maxFixIterations = clampBlockReviews(requested);
@@ -94,4 +96,13 @@ export function loadConfig(): OrchestratorConfig {
 export function clampBlockReviews(n: number): number {
   if (!Number.isFinite(n) || n < 1) return MAX_BLOCK_REVIEWS;
   return Math.min(Math.floor(n), MAX_BLOCK_REVIEWS);
+}
+
+/** Owner/repo used in GitHub URLs and `gh --repo`; reject path/flag injection. */
+export function assertGithubName(label: string, value: string): void {
+  if (!/^[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9])?$/.test(value)) {
+    throw new Error(
+      `${label} must be a GitHub owner or repository name (letters, digits, hyphen, underscore, dot).`,
+    );
+  }
 }

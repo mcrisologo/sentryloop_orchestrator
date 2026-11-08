@@ -26,7 +26,7 @@ export function buildFailureReport(result: OrchestratorResult): string {
   } else {
     for (const it of result.iterations) {
       lines.push(
-        `- Round ${it.iteration}: verdict=**${it.skepticReport.verdict}**, tests=${it.testsPassed ? "pass" : "fail"}, spec=\`${it.regressionSpecPath ?? "missing"}\``,
+        `- Round ${it.iteration}: verdict=**${it.skepticReport.verdict}**, tests=${it.testsPassed ? "pass" : "fail"}, spec=\`${escapeCodeSpan(singleLine(it.regressionSpecPath ?? "missing", 200))}\``,
       );
       for (const finding of it.skepticReport.blockingFindings.slice(0, 5)) {
         lines.push(`  - ${escapeMarkdownText(singleLine(finding, 300))}`);
@@ -36,7 +36,10 @@ export function buildFailureReport(result: OrchestratorResult): string {
 
   if (result.investigation.rootCause) {
     lines.push(``, `### Investigation root cause (excerpt)`, ``);
-    lines.push(result.investigation.rootCause.slice(0, 1200));
+    const excerpt = result.investigation.rootCause
+      .replace(/```/g, "'''")
+      .slice(0, 1200);
+    lines.push("```text", excerpt, "```");
   }
 
   lines.push(
