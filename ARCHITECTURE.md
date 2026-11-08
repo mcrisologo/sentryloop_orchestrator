@@ -1,14 +1,14 @@
-# Architecture — sentry_loop_orchestrator
+# Architecture — sentryloop_orchestrator
 
 **Public names**
 
 | Layer | Name |
 |-------|------|
-| GitHub repo | `sentry_loop_orchestrator` |
+| GitHub repo | `sentryloop_orchestrator` |
 | npm package | `@gohub/sentry-loop-orchestrator` |
 | Env prefix | `SENTRY_AUTO_FIX_*` (+ `GITHUB_OWNER` / `GITHUB_REPO` / `CURSOR_API_KEY`) |
 
-Companion: [`sentry_loop_bridge`](https://github.com/mcrisologo/sentry_loop_bridge).
+Companion: [`sentryloop_rubybridge`](https://github.com/mcrisologo/sentryloop_rubybridge).
 
 ## Runtime sequence
 
