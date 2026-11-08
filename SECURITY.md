@@ -4,7 +4,7 @@
 
 | Surface | Risk | Mitigations |
 |---------|------|-------------|
-| Prompt injection via Sentry title/stack | Steer Cursor agents that push code | Untrusted delimiters; truncate stacks; sanitized lock/PR markdown; no auto-merge; host CI must verify |
+| Prompt injection via Sentry title/stack | Steer Cursor agents that push code | Untrusted delimiters; neutralize instruction-like phrases; truncate stacks; sanitized lock/PR markdown; no auto-merge; host CI must verify |
 | Misconfigured public install | Agents hit wrong repo / burn Cursor quota | Required `GITHUB_OWNER`/`GITHUB_REPO` with name validation; kill switch default **off** |
 | Secret leakage | Cursor / GitHub tokens in git; creds in issue URLs | `.gitignore` for `.env`; allowlisted env-file keys only; Sentry URLs reject embedded credentials |
 | Duplicate spend | Race on lock / missing token | Fail-closed lock when token present; require token in CI |
