@@ -36,6 +36,8 @@ is treated as trusted instruction text.
 
 ## Docs
 
+- Quick look: [`docs/mind_maps/orchestrator.md`](docs/mind_maps/orchestrator.md)
+- Runtime internals: [`docs/orchestrator/runtime.md`](docs/orchestrator/runtime.md)
 - Wire contract: [`CONTRACT.md`](./CONTRACT.md)
 - Operator security: [`SECURITY.md`](./SECURITY.md)
-- Host product mind maps live in the consuming app
+- Host **product** mind maps still live in the consuming app

@@ -192,5 +192,6 @@ Do not commit `.env` or API keys.
 
 ## Related
 
+- Quick look: [orchestrator mind map](docs/mind_maps/orchestrator.md)
 - Bridge gem repo: https://github.com/mcrisologo/sentryloop_rubybridge
 - [SECURITY.md](./SECURITY.md)
