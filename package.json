@@ -34,16 +34,16 @@
     "node": ">=22.13"
   },
   "dependencies": {
-    "@cursor/sdk": "^1.0.23"
+    "@cursor/sdk": "^1.3.1"
   },
   "devDependencies": {
-    "@types/node": "^22.10.0",
-    "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "@types/node": "^22.20.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mcrisologo/sentry_loop_orchestrator.git"
+    "url": "git+https://github.com/mcrisologo/sentryloop_orchestrator.git"
   },
   "keywords": [
     "sentry",
