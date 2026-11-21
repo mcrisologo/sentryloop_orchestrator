@@ -172,4 +172,44 @@ describe("acquireDedupeSlot", () => {
       assert.equal(result.lockUrl, "https://github.com/acme/widgets/issues/20");
     }
   });
+
+  it("escapes Sentry title markdown in the lock issue body", async () => {
+    const captured: string[] = [];
+    const injected: SentryIssueContext = {
+      ...issue,
+      title: "[click me](https://evil.example) and *more*",
+    };
+    const runner: GhRunner = async (args) => {
+      const cmd = `${args[0]} ${args[1]}`;
+      if (cmd === "issue create") {
+        const bodyIdx = args.indexOf("--body");
+        captured.push(args[bodyIdx + 1] ?? "");
+        return JSON.stringify({
+          url: "https://github.com/acme/widgets/issues/20",
+          number: 20,
+        });
+      }
+      if (cmd === "issue list") {
+        return JSON.stringify([
+          {
+            number: 20,
+            url: "https://github.com/acme/widgets/issues/20",
+            title: "[sentry-auto-fix lock] abc123",
+            body: "sentry-dedupe:abc123",
+            labels: [{ name: "sentry-auto-fix-lock" }],
+          },
+        ]);
+      }
+      if (cmd === "pr list") return "[]";
+      throw new Error(`unexpected: ${args.join(" ")}`);
+    };
+
+    await acquireDedupeSlot(injected, "abc123", baseConfig(), {
+      ghRunner: runner,
+    });
+
+    assert.equal(captured.length, 1);
+    assert.match(captured[0], /\\\[click me\\]\(https:\/\/evil\.example\) and \\\*more\\\*/);
+    assert.equal(captured[0].includes("[click me](https://evil.example)"), false);
+  });
 });

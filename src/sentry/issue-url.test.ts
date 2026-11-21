@@ -39,4 +39,19 @@ describe("validateSentryIssueUrl", () => {
       "https://sentry.internal.example/issues/9/",
     );
   });
+
+  it("rejects URLs with embedded credentials", () => {
+    assert.throws(
+      () =>
+        validateSentryIssueUrl("https://user:token@sentry.io/issues/123/"),
+      /credentials/,
+    );
+  });
+
+  it("strips URL fragments", () => {
+    assert.equal(
+      validateSentryIssueUrl("https://sentry.io/issues/123/#injected"),
+      "https://sentry.io/issues/123/",
+    );
+  });
 });

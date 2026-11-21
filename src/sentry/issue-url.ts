@@ -27,6 +27,10 @@ export function validateSentryIssueUrl(
       "Sentry issue URL must be HTTPS, use an allowed Sentry host, and contain /issues/.",
     );
   }
+  if (url.username || url.password) {
+    throw new Error("Sentry issue URL must not include credentials.");
+  }
 
+  url.hash = "";
   return url.toString();
 }

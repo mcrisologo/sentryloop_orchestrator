@@ -25,12 +25,25 @@ export function neutralizeDelimiters(text: string): string {
   return text.replace(/<<</g, "<\u200b<\u200b<").replace(/>>>/g, ">\u200b>\u200b>");
 }
 
+/**
+ * Prompt-injection phrases in Sentry titles/stacks are data, not instructions.
+ * Replace the phrase; keep surrounding evidence so the agent can still debug.
+ */
+export function neutralizeInstructionLike(text: string): string {
+  return text.replace(
+    /\b(?:ignore(?:\s+(?:all|any|previous|prior|above|your))*\s+instructions?|you are now\b|system prompt\b|new (?:system )?role\b)\b/gi,
+    "[neutralized]",
+  );
+}
+
 export function untrustedBlock(
   label: string,
   body: string | undefined,
   max: number = MAX_STACK_CHARS,
 ): string {
-  const content = neutralizeDelimiters(truncate(body, max));
+  const content = neutralizeInstructionLike(
+    neutralizeDelimiters(truncate(body, max)),
+  );
   if (!content) return "";
   return [
     UNTRUSTED_PREAMBLE,
