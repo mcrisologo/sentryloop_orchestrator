@@ -3,9 +3,9 @@
 Cursor SDK pipeline: **Sentry issue → investigate → fix/skeptic loop (max 3) → GitHub PR**.
 
 Standalone npm package: **`@gohub/sentry-loop-orchestrator`**  
-Repository: [`sentry_loop_orchestrator`](https://github.com/mcrisologo/sentry_loop_orchestrator)
+Repository: [`sentryloop_orchestrator`](https://github.com/mcrisologo/sentryloop_orchestrator)
 
-Companion bridge (separate repo): [`sentry_loop_bridge`](https://github.com/mcrisologo/sentry_loop_bridge)
+Companion bridge (separate repo): [`sentryloop_rubybridge`](https://github.com/mcrisologo/sentryloop_rubybridge)
 (`sentry_github_dispatch` Ruby gem).
 
 ## Why you need a bridge
@@ -20,7 +20,7 @@ This package is the **orchestrator** (runs in GitHub Actions after dispatch). Th
 
 ### Option A — App as bridge (Rails gem `sentry_github_dispatch`)
 
-Install the separate [`sentry_loop_bridge`](https://github.com/mcrisologo/sentry_loop_bridge) gem in your app. Sentry POSTs to your host; the gem verifies auth, allowlists environment, enqueues a job, and the job calls `repository_dispatch`.
+Install the separate [`sentryloop_rubybridge`](https://github.com/mcrisologo/sentryloop_rubybridge) gem in your app. Sentry POSTs to your host; the gem verifies auth, allowlists environment, enqueues a job, and the job calls `repository_dispatch`.
 
 ```text
 Sentry alert → https://<app>/internal/webhooks/sentry/<TOKEN>/auto_fix
@@ -35,7 +35,7 @@ Sentry alert → https://<app>/internal/webhooks/sentry/<TOKEN>/auto_fix
 
 **Best when:** you already run a Rails app that can expose a public webhook, and you want security gates owned in-repo.
 
-See gem README: [sentry_loop_bridge](https://github.com/mcrisologo/sentry_loop_bridge).
+See gem README: [sentryloop_rubybridge](https://github.com/mcrisologo/sentryloop_rubybridge).
 
 ---
 
@@ -92,7 +92,7 @@ All three still end the same way: GitHub Actions runs **this** orchestrator, whi
 ## Install
 
 ```bash
-npm install github:OWNER/sentry_loop_orchestrator
+npm install github:OWNER/sentryloop_orchestrator
 # or after publish:
 npm install @gohub/sentry-loop-orchestrator
 
@@ -105,8 +105,8 @@ Local sibling layout (optional, not a monorepo):
 ror/dasig/
   dasig/
   sentry_loop/                    # folder only — not a git repo
-    sentry_loop_bridge/           # separate git repo
-    sentry_loop_orchestrator/     # this git repo
+    sentryloop_rubybridge/        # separate git repo (GitHub: sentryloop_rubybridge)
+    sentryloop_orchestrator/      # this git repo
 ```
 
 Host app workflows check out **this** repo alone (not a parent `sentry_loop` repo) and run `npm ci` here.
@@ -149,10 +149,10 @@ Exit codes:
 ## GitHub Actions (host app)
 
 1. Checkout the app repo
-2. Checkout `OWNER/sentry_loop_orchestrator` into `sentry_loop_orchestrator/`
+2. Checkout `OWNER/sentryloop_orchestrator` into `sentryloop_orchestrator/`
 3. `npm ci` + run from that directory
 
-Optional Actions variable: `SENTRY_LOOP_ORCHESTRATOR_REPOSITORY` (default `{owner}/sentry_loop_orchestrator`).  
+Optional Actions variable: `SENTRY_LOOP_ORCHESTRATOR_REPOSITORY` (default `{owner}/sentryloop_orchestrator`).  
 Optional secret: `SENTRY_LOOP_GITHUB_TOKEN` if the orchestrator repo is private.
 
 ### Secrets / variables (on the **app** repo)
@@ -161,7 +161,7 @@ Optional secret: `SENTRY_LOOP_GITHUB_TOKEN` if the orchestrator repo is private.
 |------|------|---------|
 | `CURSOR_API_KEY` | secret | Cursor cloud agents |
 | `SENTRY_LOOP_GITHUB_TOKEN` | secret (optional) | Checkout private orchestrator repo |
-| `SENTRY_LOOP_ORCHESTRATOR_REPOSITORY` | variable (optional) | Default `{owner}/sentry_loop_orchestrator` |
+| `SENTRY_LOOP_ORCHESTRATOR_REPOSITORY` | variable (optional) | Default `{owner}/sentryloop_orchestrator` |
 | `SENTRY_AUTO_FIX_ENABLED` | variable | Must be `true`/`1`/`on`/`yes` to run (default **off**) |
 
 ## Configuration
@@ -192,5 +192,6 @@ Do not commit `.env` or API keys.
 
 ## Related
 
-- Bridge gem repo: https://github.com/mcrisologo/sentry_loop_bridge
+- Quick look: [orchestrator mind map](docs/mind_maps/orchestrator.md)
+- Bridge gem repo: https://github.com/mcrisologo/sentryloop_rubybridge
 - [SECURITY.md](./SECURITY.md)
